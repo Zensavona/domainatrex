@@ -32,7 +32,7 @@ defmodule Domainatrex.Mixfile do
   # Type "mix help deps" for more examples and options
   defp deps do
     [
-      {:ex_doc, "~> 0.13.1", only: [:dev, :docs]},
+      {:ex_doc, "~> 0.15", only: [:dev, :docs]},
       {:excoveralls, "~> 0.6", only: [:dev, :test]},
       {:inch_ex, "~> 0.5", only: [:dev, :docs]},
     ]
