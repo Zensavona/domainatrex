@@ -3,7 +3,7 @@ defmodule Domainatrex do
   Documentation for Domainatrex.
   """
 
-  case File.read "public_suffix_list.dat" do
+  case File.read "lib/public_suffix_list.dat" do
     {:ok, string} ->
       suffixes =
         string
