@@ -3,10 +3,13 @@ defmodule Domainatrex.Mixfile do
 
   def project do
     [app: :domainatrex,
-     version: "0.1.0",
+     version: "1.0.0",
      elixir: "~> 1.4",
+     test_coverage: [tool: ExCoveralls],
      build_embedded: Mix.env == :prod,
      start_permanent: Mix.env == :prod,
+     description: description(),
+     package: package(),
      deps: deps()]
   end
 
@@ -28,6 +31,27 @@ defmodule Domainatrex.Mixfile do
   #
   # Type "mix help deps" for more examples and options
   defp deps do
-    []
+    [
+      {:ex_doc, "~> 0.13.1", only: [:dev, :docs]},
+      {:excoveralls, "~> 0.6", only: [:dev, :test]},
+      {:inch_ex, "~> 0.5", only: [:dev, :docs]},
+    ]
+  end
+
+
+  defp description do
+    """
+    Domain / TLD parsing library for Elixir, using the Public Suffix List.
+    """
+  end
+
+  defp package do
+    [
+      licenses: ["MIT"],
+      keywords: ["Elixir", "Domain", "TLD", "Public Suffix"],
+      maintainers: ["Zen Savona"],
+      links: %{"GitHub" => "https://github.com/zensavona/domainatrex",
+               "Docs" => "https://hexdocs.pm/domainatrex"}
+    ]
   end
 end

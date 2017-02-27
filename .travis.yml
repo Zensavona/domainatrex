@@ -1,0 +1,9 @@
+language: elixir
+elixir:
+  - 1.4.0
+otp_release:
+  - 19
+after_script:
+  - MIX_ENV=docs mix deps.get
+  - MIX_ENV=docs mix inch.report
+  - MIX_ENV=test mix do deps.get, compile, coveralls.travis
