@@ -1,9 +1,9 @@
 # Domainatrex
 
 
-### Elixtagram is a simple Instagram client for Elixir.
+### Domainatrex is a TLD parsing library for Elixir, using the Public Suffix list.
 
-[![Build Status](https://travis-ci.org/Zensavona/elixtagram.svg?branch=master)](https://travis-ci.org/Zensavona/elixtagram) [![Inline docs](http://inch-ci.org/github/zensavona/elixtagram.svg)](http://inch-ci.org/github/zensavona/elixtagram) [![Coverage Status](https://coveralls.io/repos/Zensavona/elixtagram/badge.svg?branch=master&service=github)](https://coveralls.io/github/Zensavona/elixtagram?branch=master) [![Deps Status](https://beta.hexfaktor.org/badge/all/github/Zensavona/elixtagram.svg)](https://beta.hexfaktor.org/github/Zensavona/elixtagram) [![hex.pm version](https://img.shields.io/hexpm/v/elixtagram.svg)](https://hex.pm/packages/elixtagram) [![hex.pm downloads](https://img.shields.io/hexpm/dt/elixtagram.svg)](https://hex.pm/packages/elixtagram) [![License](http://img.shields.io/badge/license-MIT-brightgreen.svg)](http://opensource.org/licenses/MIT)
+[![Build Status](https://travis-ci.org/Zensavona/domainatrex.svg?branch=master)](https://travis-ci.org/Zensavona/domainatrex) [![Inline docs](http://inch-ci.org/github/zensavona/domainatrex.svg)](http://inch-ci.org/github/zensavona/domainatrex) [![Coverage Status](https://coveralls.io/repos/Zensavona/domainatrex/badge.svg?branch=master&service=github)](https://coveralls.io/github/Zensavona/domainatrex?branch=master) [![Deps Status](https://beta.hexfaktor.org/badge/all/github/Zensavona/domainatrex.svg)](https://beta.hexfaktor.org/github/Zensavona/domainatrex) [![hex.pm version](https://img.shields.io/hexpm/v/domainatrex.svg)](https://hex.pm/packages/domainatrex) [![hex.pm downloads](https://img.shields.io/hexpm/dt/domainatrex.svg)](https://hex.pm/packages/domainatrex) [![License](http://img.shields.io/badge/license-MIT-brightgreen.svg)](http://opensource.org/licenses/MIT)
 
 ### [Read the docs](https://hexdocs.pm/domainatrex)
 
