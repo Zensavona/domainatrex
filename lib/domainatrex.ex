@@ -72,7 +72,7 @@ defmodule Domainatrex do
     match(adjusted_url)
   end
 
-  def match(_) do
-    raise "Invalid domain"
+  def match(it) do
+    raise "Invalid domain #{it}"
   end
 end
