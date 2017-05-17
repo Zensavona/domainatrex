@@ -16,7 +16,7 @@ Add the following to your `mix.exs`
 ```
 
 defp deps do
-  [{:domainatrex, "~> 1.0"}]
+  [{:domainatrex, "~> 2.0"}]
 
 ```
 
@@ -26,12 +26,15 @@ defp deps do
 
 ```
 iex> Domainatrex.parse("someone.com")
-%{domain: "someone", subdomain: "", tld: "com"}
+{:ok, %{domain: "someone", subdomain: "", tld: "com"}}
 
 iex> Domainatrex.parse("blog.someone.id.au")
-%{domain: "someone", subdomain: "blog", tld: "id.au"}
+{:ok, %{domain: "someone", subdomain: "blog", tld: "id.au"}}
 ```
 
 
 
 ## Changelog
+
+### 2.0.0
+- Change the API from returning explicit results to {:ok, result} or {:error, result}. This is to be more uniform with other libraries I use and for better `with` usage. Sorry if this fucks up your day.
