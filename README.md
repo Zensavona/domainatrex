@@ -36,5 +36,8 @@ iex> Domainatrex.parse("blog.someone.id.au")
 
 ## Changelog
 
+### 1.0.1
+- Fully update the tests to reflect changes in `2.0.0` (thanks for the PR @pbonney!)
+
 ### 2.0.0
 - Change the API from returning explicit results to {:ok, result} or {:error, result}. This is to be more uniform with other libraries I use and for better `with` usage. Sorry if this fucks up your day.
