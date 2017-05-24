@@ -61,10 +61,10 @@ defmodule Domainatrex do
   @doc """
   ## Examples
       iex> Domainatrex.parse("someone.com")
-      %{domain: "someone", subdomain: "", tld: "com"}
+      {:ok, %{domain: "someone", subdomain: "", tld: "com"}}
 
       iex> Domainatrex.parse("blog.someone.id.au")
-      %{domain: "someone", subdomain: "blog", tld: "id.au"}
+      {:ok, %{domain: "someone", subdomain: "blog", tld: "id.au"}}
   """
   def parse(url) do
     case String.length(url) > 1 && String.contains?(url, ".") do
