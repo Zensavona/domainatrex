@@ -16,7 +16,7 @@ Add the following to your `mix.exs`
 ```
 
 defp deps do
-  [{:domainatrex, "~> 2.0"}]
+  [{:domainatrex, "~> 2.1"}]
 
 ```
 
@@ -36,8 +36,12 @@ iex> Domainatrex.parse("blog.someone.id.au")
 
 ## Changelog
 
-### 1.0.1
-- Fully update the tests to reflect changes in `2.0.0` (thanks for the PR @pbonney!)
+### 2.1.0
+- Better handle private domains. Private domains like `*.s3.amazonaws.com` are technically classed as TLDs (to my understanding?), it doesn't make a lot of sense to parse them this way.
+- Fetch a new copy of the public suffix list from The Internet on compile, falling back to a (now updated!) local copy.
 
 ### 2.0.0
 - Change the API from returning explicit results to {:ok, result} or {:error, result}. This is to be more uniform with other libraries I use and for better `with` usage. Sorry if this fucks up your day.
+
+### 1.0.1
+- Fully update the tests to reflect changes in `2.0.0` (thanks for the PR @pbonney!)
