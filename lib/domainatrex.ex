@@ -2,54 +2,69 @@ defmodule Domainatrex do
   @moduledoc """
   Documentation for Domainatrex.
   """
+  @public_suffix_list_url 'https://raw.githubusercontent.com/publicsuffix/list/master/public_suffix_list.dat'
+  @public_suffix_list nil
 
-  case File.read "lib/public_suffix_list.dat" do
-    {:ok, string} ->
-      suffixes =
-        string
-        |> String.split("\n")
-        |> Enum.reject(&(&1 == ""))
-        |> Enum.reject(&(String.contains?(&1, "//")))
-        |> Enum.reject(&(String.contains?(&1, "*")))
-        |> Enum.map(&(String.split(&1, ".")))
-        |> Enum.map(&Enum.reverse/1)
-        |> Enum.sort_by(&length/1)
-        |> Enum.reverse
+  :inets.start
+  :ssl.start
 
-      Enum.each(suffixes, fn(suffix) ->
-        case length(suffix) do
-          1 ->
-            def match([unquote(Enum.at(suffix,0)) | tail] = args) do
-              tld = [Enum.at(args, 0)]
-              {:ok, Domainatrex.format_response(tld, tail)}
-            end
-          2 ->
-            def match([unquote(Enum.at(suffix,0)), unquote(Enum.at(suffix,1)) | tail] = args) do
-              tld = [Enum.at(args, 0), Enum.at(args, 1)]
-              {:ok, Domainatrex.format_response(tld, tail)}
-            end
-          3 ->
-            def match([unquote(Enum.at(suffix,0)), unquote(Enum.at(suffix,1)), unquote(Enum.at(suffix,2)) | tail] = args) do
-              tld = [Enum.at(args, 0), Enum.at(args, 1), Enum.at(args, 2)]
-              {:ok, Domainatrex.format_response(tld, tail)}
-            end
-          4 ->
-            def match([unquote(Enum.at(suffix,0)), unquote(Enum.at(suffix,1)), unquote(Enum.at(suffix,2)), unquote(Enum.at(suffix,3)) | tail] = args) do
-              tld = [Enum.at(args, 0), Enum.at(args, 1), Enum.at(args, 2), Enum.at(args, 3)]
-              {:ok, Domainatrex.format_response(tld, tail)}
-            end
-          5 ->
-            def match([unquote(Enum.at(suffix,0)), unquote(Enum.at(suffix,1)), unquote(Enum.at(suffix,2)), unquote(Enum.at(suffix,3)), unquote(Enum.at(suffix,4)) | tail] = args) do
-              tld = [Enum.at(args, 0), Enum.at(args, 1), Enum.at(args, 2), Enum.at(args, 3), Enum.at(args, 4)]
-              {:ok, Domainatrex.format_response(tld, tail)}
-            end
-          _ ->
-            {:error, "There exists a domain in the list which contains more than 5 dots: #{suffix}"}
-        end
-      end)
-    error ->
-      error
+  case :httpc.request(:get, {@public_suffix_list_url, []}, [], []) do
+    {:ok, {_, _, string}} ->
+      @public_suffix_list to_string(string)
+    _ ->
+      case File.read "lib/public_suffix_list.dat" do
+        {:ok, string} ->
+          IO.puts "[Domainatrex] Error: Could not read the public suffix list from the internet, trying to read from the backup at lib/public_suffix_list.dat"
+          @public_suffix_list string
+        _ ->
+          IO.puts "[Domainatrex] Error: Could not read the public suffix list, please make sure that you either have an internet connection or lib/public_suffix_list.dat exists"
+          @public_suffix_list nil
+      end
   end
+
+  string = @public_suffix_list |> String.split("// ===END ICANN DOMAINS===") |> List.first
+  suffixes =
+    string
+    |> String.split("\n")
+    |> Enum.reject(&(&1 == ""))
+    |> Enum.reject(&(String.contains?(&1, "//")))
+    |> Enum.reject(&(String.contains?(&1, "*")))
+    |> Enum.map(&(String.split(&1, ".")))
+    |> Enum.map(&Enum.reverse/1)
+    |> Enum.sort_by(&length/1)
+    |> Enum.reverse
+
+  Enum.each(suffixes, fn(suffix) ->
+    case length(suffix) do
+      1 ->
+        def match([unquote(Enum.at(suffix,0)) | tail] = args) do
+          tld = [Enum.at(args, 0)]
+          {:ok, Domainatrex.format_response(tld, tail)}
+        end
+      2 ->
+        def match([unquote(Enum.at(suffix,0)), unquote(Enum.at(suffix,1)) | tail] = args) do
+          tld = [Enum.at(args, 0), Enum.at(args, 1)]
+          {:ok, Domainatrex.format_response(tld, tail)}
+        end
+      3 ->
+        def match([unquote(Enum.at(suffix,0)), unquote(Enum.at(suffix,1)), unquote(Enum.at(suffix,2)) | tail] = args) do
+          tld = [Enum.at(args, 0), Enum.at(args, 1), Enum.at(args, 2)]
+          {:ok, Domainatrex.format_response(tld, tail)}
+        end
+      4 ->
+        def match([unquote(Enum.at(suffix,0)), unquote(Enum.at(suffix,1)), unquote(Enum.at(suffix,2)), unquote(Enum.at(suffix,3)) | tail] = args) do
+          tld = [Enum.at(args, 0), Enum.at(args, 1), Enum.at(args, 2), Enum.at(args, 3)]
+          {:ok, Domainatrex.format_response(tld, tail)}
+        end
+      5 ->
+        def match([unquote(Enum.at(suffix,0)), unquote(Enum.at(suffix,1)), unquote(Enum.at(suffix,2)), unquote(Enum.at(suffix,3)), unquote(Enum.at(suffix,4)) | tail] = args) do
+          tld = [Enum.at(args, 0), Enum.at(args, 1), Enum.at(args, 2), Enum.at(args, 3), Enum.at(args, 4)]
+          {:ok, Domainatrex.format_response(tld, tail)}
+        end
+      _ ->
+        {:error, "There exists a domain in the list which contains more than 5 dots: #{suffix}"}
+    end
+  end)
 
   def format_response(tld, domain) do
     [domain | subdomains] = domain
@@ -76,7 +91,7 @@ defmodule Domainatrex do
     end
   end
 
-  def match(it) do
+  def match(_it) do
     {:error, "Cannot match: invalid domain"}
   end
 end
