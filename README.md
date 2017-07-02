@@ -16,7 +16,7 @@ Add the following to your `mix.exs`
 ```
 
 defp deps do
-  [{:domainatrex, "~> 2.1.1"}]
+  [{:domainatrex, "~> 2.1.2"}]
 
 ```
 
@@ -35,6 +35,9 @@ iex> Domainatrex.parse("blog.someone.id.au")
 
 
 ## Changelog
+
+### 2.1.2
+- Improve tests and docs slightly
 
 ### 2.1.1
 - Privatise `Domainatrex.match/n` and `Domainatrex.format_response/2` as they are only ever intended for internal use

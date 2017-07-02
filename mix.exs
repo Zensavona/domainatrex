@@ -3,7 +3,7 @@ defmodule Domainatrex.Mixfile do
 
   def project do
     [app: :domainatrex,
-     version: "2.1.1",
+     version: "2.1.2",
      elixir: "~> 1.3",
      test_coverage: [tool: ExCoveralls],
      build_embedded: Mix.env == :prod,
