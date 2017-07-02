@@ -16,7 +16,7 @@ Add the following to your `mix.exs`
 ```
 
 defp deps do
-  [{:domainatrex, "~> 2.1"}]
+  [{:domainatrex, "~> 2.1.1"}]
 
 ```
 
@@ -35,6 +35,9 @@ iex> Domainatrex.parse("blog.someone.id.au")
 
 
 ## Changelog
+
+### 2.1.1
+- Privatise `Domainatrex.match/n` and `Domainatrex.format_response/2` as they are only ever intended for internal use
 
 ### 2.1.0
 - Better handle private domains. Private domains like `*.s3.amazonaws.com` are technically classed as TLDs (to my understanding?), it doesn't make a lot of sense to parse them this way.
