@@ -75,6 +75,9 @@ defmodule Domainatrex do
 
       iex> Domainatrex.parse("blog.someone.id.au")
       {:ok, %{domain: "someone", subdomain: "blog", tld: "id.au"}}
+
+      iex> Domainatrex.parse("zen.s3.amazonaws.com")
+      {:ok, %{domain: "amazonaws", subdomain: "zen.s3", tld: "com"}}
   """
   def parse(url) do
     case String.length(url) > 1 && String.contains?(url, ".") do
