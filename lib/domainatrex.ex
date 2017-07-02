@@ -37,36 +37,31 @@ defmodule Domainatrex do
   Enum.each(suffixes, fn(suffix) ->
     case length(suffix) do
       1 ->
-        def match([unquote(Enum.at(suffix,0)) | tail] = args) do
-          tld = [Enum.at(args, 0)]
-          {:ok, Domainatrex.format_response(tld, tail)}
+        defp match([unquote(Enum.at(suffix,0)) | tail] = args) do
+          {:ok, format_response([Enum.at(args, 0)], tail)}
         end
       2 ->
-        def match([unquote(Enum.at(suffix,0)), unquote(Enum.at(suffix,1)) | tail] = args) do
-          tld = [Enum.at(args, 0), Enum.at(args, 1)]
-          {:ok, Domainatrex.format_response(tld, tail)}
+        defp match([unquote(Enum.at(suffix,0)), unquote(Enum.at(suffix,1)) | tail] = args) do
+          {:ok, format_response([Enum.at(args, 0), Enum.at(args, 1)], tail)}
         end
       3 ->
-        def match([unquote(Enum.at(suffix,0)), unquote(Enum.at(suffix,1)), unquote(Enum.at(suffix,2)) | tail] = args) do
-          tld = [Enum.at(args, 0), Enum.at(args, 1), Enum.at(args, 2)]
-          {:ok, Domainatrex.format_response(tld, tail)}
+        defp match([unquote(Enum.at(suffix,0)), unquote(Enum.at(suffix,1)), unquote(Enum.at(suffix,2)) | tail] = args) do
+          {:ok, format_response([Enum.at(args, 0), Enum.at(args, 1), Enum.at(args, 2)], tail)}
         end
       4 ->
-        def match([unquote(Enum.at(suffix,0)), unquote(Enum.at(suffix,1)), unquote(Enum.at(suffix,2)), unquote(Enum.at(suffix,3)) | tail] = args) do
-          tld = [Enum.at(args, 0), Enum.at(args, 1), Enum.at(args, 2), Enum.at(args, 3)]
-          {:ok, Domainatrex.format_response(tld, tail)}
+        defp match([unquote(Enum.at(suffix,0)), unquote(Enum.at(suffix,1)), unquote(Enum.at(suffix,2)), unquote(Enum.at(suffix,3)) | tail] = args) do
+          {:ok, format_response([Enum.at(args, 0), Enum.at(args, 1), Enum.at(args, 2), Enum.at(args, 3)], tail)}
         end
       5 ->
-        def match([unquote(Enum.at(suffix,0)), unquote(Enum.at(suffix,1)), unquote(Enum.at(suffix,2)), unquote(Enum.at(suffix,3)), unquote(Enum.at(suffix,4)) | tail] = args) do
-          tld = [Enum.at(args, 0), Enum.at(args, 1), Enum.at(args, 2), Enum.at(args, 3), Enum.at(args, 4)]
-          {:ok, Domainatrex.format_response(tld, tail)}
+        defp match([unquote(Enum.at(suffix,0)), unquote(Enum.at(suffix,1)), unquote(Enum.at(suffix,2)), unquote(Enum.at(suffix,3)), unquote(Enum.at(suffix,4)) | tail] = args) do
+          {:ok, format_response([Enum.at(args, 0), Enum.at(args, 1), Enum.at(args, 2), Enum.at(args, 3), Enum.at(args, 4)], tail)}
         end
       _ ->
         {:error, "There exists a domain in the list which contains more than 5 dots: #{suffix}"}
     end
   end)
 
-  def format_response(tld, domain) do
+  defp format_response(tld, domain) do
     [domain | subdomains] = domain
     tld = tld |> Enum.reverse |> Enum.join(".")
     subdomains = subdomains |> Enum.reverse |> Enum.join(".")
@@ -91,7 +86,7 @@ defmodule Domainatrex do
     end
   end
 
-  def match(_it) do
+  defp match(_it) do
     {:error, "Cannot match: invalid domain"}
   end
 end
