@@ -36,6 +36,9 @@ iex> Domainatrex.parse("blog.someone.id.au")
 
 ## Changelog
 
+### 2.1.4
+- Pin a version of `nimble_parsec` to fix a compilation error on `makeup` (`makeup` has fixed this downstream, so when `ex_doc` updates `makeup`, this will no longer be required)
+
 ### 2.1.3
 - Merge a couple of minor PRs
 
