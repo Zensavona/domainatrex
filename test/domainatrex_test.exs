@@ -15,10 +15,18 @@ defmodule DomainatrexTest do
   end
 
   test "s3" do
-   assert Domainatrex.parse("s3.amazonaws.com") == {:ok, %{domain: "amazonaws", subdomain: "s3", tld: "com"}}
+    assert Domainatrex.parse("s3.amazonaws.com") == {:ok, %{domain: "amazonaws", subdomain: "s3", tld: "com"}}
   end
 
- test "nonsense" do
-   assert Domainatrex.parse("nonsense") == {:error, "Cannot parse: invalid domain"}
- end
+  test "nonsense" do
+    assert Domainatrex.parse("nonsense") == {:error, "Cannot parse: invalid domain"}
+  end
+
+  test "valid pubblic suffix without domain" do
+    ["ca.us", "fl.us", "or.us"]
+    |> Enum.each(fn domain -> 
+      assert Domainatrex.parse(domain) == {:error, "Cannot parse: invalid domain"}
+    end)
+    
+  end
 end

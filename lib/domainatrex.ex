@@ -38,23 +38,23 @@ defmodule Domainatrex do
     case length(suffix) do
       1 ->
         defp match([unquote(Enum.at(suffix,0)) | tail] = args) do
-          {:ok, format_response([Enum.at(args, 0)], tail)}
+          format_response([Enum.at(args, 0)], tail)
         end
       2 ->
         defp match([unquote(Enum.at(suffix,0)), unquote(Enum.at(suffix,1)) | tail] = args) do
-          {:ok, format_response([Enum.at(args, 0), Enum.at(args, 1)], tail)}
+          format_response([Enum.at(args, 0), Enum.at(args, 1)], tail)
         end
       3 ->
         defp match([unquote(Enum.at(suffix,0)), unquote(Enum.at(suffix,1)), unquote(Enum.at(suffix,2)) | tail] = args) do
-          {:ok, format_response([Enum.at(args, 0), Enum.at(args, 1), Enum.at(args, 2)], tail)}
+          format_response([Enum.at(args, 0), Enum.at(args, 1), Enum.at(args, 2)], tail)
         end
       4 ->
         defp match([unquote(Enum.at(suffix,0)), unquote(Enum.at(suffix,1)), unquote(Enum.at(suffix,2)), unquote(Enum.at(suffix,3)) | tail] = args) do
-          {:ok, format_response([Enum.at(args, 0), Enum.at(args, 1), Enum.at(args, 2), Enum.at(args, 3)], tail)}
+          format_response([Enum.at(args, 0), Enum.at(args, 1), Enum.at(args, 2), Enum.at(args, 3)], tail)
         end
       5 ->
         defp match([unquote(Enum.at(suffix,0)), unquote(Enum.at(suffix,1)), unquote(Enum.at(suffix,2)), unquote(Enum.at(suffix,3)), unquote(Enum.at(suffix,4)) | tail] = args) do
-          {:ok, format_response([Enum.at(args, 0), Enum.at(args, 1), Enum.at(args, 2), Enum.at(args, 3), Enum.at(args, 4)], tail)}
+          format_response([Enum.at(args, 0), Enum.at(args, 1), Enum.at(args, 2), Enum.at(args, 3), Enum.at(args, 4)], tail)
         end
       _ ->
         {:error, "There exists a domain in the list which contains more than 5 dots: #{suffix}"}
@@ -62,10 +62,13 @@ defmodule Domainatrex do
   end)
 
   defp format_response(tld, domain) do
-    [domain | subdomains] = domain
-    tld = tld |> Enum.reverse |> Enum.join(".")
-    subdomains = subdomains |> Enum.reverse |> Enum.join(".")
-    %{domain: domain, subdomain: subdomains, tld: tld}
+    with [domain |subdomains] <- domain do
+      tld = tld |> Enum.reverse |> Enum.join(".")
+      subdomains = subdomains |> Enum.reverse |> Enum.join(".")
+      {:ok, %{domain: domain, subdomain: subdomains, tld: tld}}
+    else
+      _ -> {:error, "Cannot parse: invalid domain"}
+    end    
   end
 
   @doc """
