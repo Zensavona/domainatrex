@@ -17,6 +17,10 @@ defmodule DomainatrexTest do
   test "s3" do
     assert Domainatrex.parse("s3.amazonaws.com") == {:ok, %{domain: "amazonaws", subdomain: "s3", tld: "com"}}
   end
+  
+  test "custom suffix" do
+    assert Domainatrex.parse("s3.amazonaws.localhost") == {:ok, %{domain: "amazonaws", subdomain: "s3", tld: "localhost"}}
+  end
 
   test "nonsense" do
     assert Domainatrex.parse("nonsense") == {:error, "Cannot parse: invalid domain"}

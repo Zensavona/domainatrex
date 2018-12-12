@@ -23,12 +23,14 @@ defmodule Domainatrex do
   end
 
   string = @public_suffix_list |> String.split("// ===END ICANN DOMAINS===") |> List.first
+  custom_suffixes = Application.get_env(:domainatrex, :custom_suffixes, [])
   suffixes =
     string
     |> String.split("\n")
     |> Enum.reject(&(&1 == ""))
     |> Enum.reject(&(String.contains?(&1, "//")))
     |> Enum.reject(&(String.contains?(&1, "*")))
+    |> Enum.concat(custom_suffixes)
     |> Enum.map(&(String.split(&1, ".")))
     |> Enum.map(&Enum.reverse/1)
     |> Enum.sort_by(&length/1)
