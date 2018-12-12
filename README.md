@@ -36,6 +36,9 @@ iex> Domainatrex.parse("blog.someone.id.au")
 
 ## Changelog
 
+### 2.1.3
+- Merge a couple of minor PRs
+
 ### 2.1.2
 - Improve tests and docs slightly
 
