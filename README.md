@@ -16,7 +16,7 @@ Add the following to your `mix.exs`
 ```
 
 defp deps do
-  [{:domainatrex, "~> 2.1.2"}]
+  [{:domainatrex, "~> 2.1.5"}]
 
 ```
 
@@ -35,6 +35,9 @@ iex> Domainatrex.parse("blog.someone.id.au")
 
 
 ## Changelog
+
+### 2.1.5
+- Use `Logger` for logging
 
 ### 2.1.4
 - Pin a version of `nimble_parsec` to fix a compilation error on `makeup` (`makeup` has fixed this downstream, so when `ex_doc` updates `makeup`, this will no longer be required)
