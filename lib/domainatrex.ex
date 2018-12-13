@@ -14,10 +14,10 @@ defmodule Domainatrex do
     _ ->
       case File.read "lib/public_suffix_list.dat" do
         {:ok, string} ->
-          IO.puts "[Domainatrex] Error: Could not read the public suffix list from the internet, trying to read from the backup at lib/public_suffix_list.dat"
+          Logger.error "[Domainatrex] Could not read the public suffix list from the internet, trying to read from the backup at lib/public_suffix_list.dat"
           @public_suffix_list string
         _ ->
-          IO.puts "[Domainatrex] Error: Could not read the public suffix list, please make sure that you either have an internet connection or lib/public_suffix_list.dat exists"
+          Logger.error "[Domainatrex] Could not read the public suffix list, please make sure that you either have an internet connection or lib/public_suffix_list.dat exists"
           @public_suffix_list nil
       end
   end
@@ -70,7 +70,7 @@ defmodule Domainatrex do
       {:ok, %{domain: domain, subdomain: subdomains, tld: tld}}
     else
       _ -> {:error, "Cannot parse: invalid domain"}
-    end    
+    end
   end
 
   @doc """
