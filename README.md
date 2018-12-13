@@ -16,7 +16,7 @@ Add the following to your `mix.exs`
 ```
 
 defp deps do
-  [{:domainatrex, "~> 2.1.5"}]
+  [{:domainatrex, "~> 2.1.6"}]
 
 ```
 
@@ -36,7 +36,7 @@ iex> Domainatrex.parse("blog.someone.id.au")
 
 ## Changelog
 
-### 2.1.5
+### 2.2.0
 - Use `Logger` for logging
 
 ### 2.1.4
