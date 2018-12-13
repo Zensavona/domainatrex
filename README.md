@@ -16,7 +16,7 @@ Add the following to your `mix.exs`
 ```
 
 defp deps do
-  [{:domainatrex, "~> 2.1.6"}]
+  [{:domainatrex, "~> 2.2.0"}]
 
 ```
 
