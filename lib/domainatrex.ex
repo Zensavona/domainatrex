@@ -1,4 +1,5 @@
 defmodule Domainatrex do
+  require Logger
   @moduledoc """
   Documentation for Domainatrex.
   """
