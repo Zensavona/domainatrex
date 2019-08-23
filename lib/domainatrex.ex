@@ -3,7 +3,7 @@ defmodule Domainatrex do
   @moduledoc """
   Documentation for Domainatrex.
   """
-  @public_suffix_list_url 'https://raw.githubusercontent.com/publicsuffix/list/master/public_suffix_list.dat'
+  @public_suffix_list_url Application.get_env(:domainatrex, :public_suffix_list_url, 'https://raw.githubusercontent.com/publicsuffix/list/master/public_suffix_list.dat')
   @public_suffix_list nil
 
   :inets.start
