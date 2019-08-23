@@ -23,8 +23,14 @@ defmodule Domainatrex do
       end
   end
 
-  string = @public_suffix_list |> String.split("// ===END ICANN DOMAINS===") |> List.first
   custom_suffixes = Application.get_env(:domainatrex, :custom_suffixes, [])
+  string = if Application.get_env(:domainatrex, :include_private, false) do
+    @public_suffix_list
+  else
+    @public_suffix_list
+    |> String.split("// ===END ICANN DOMAINS===")
+    |> List.first
+  end
   suffixes =
     string
     |> String.split("\n")
