@@ -21,3 +21,7 @@ erl_crash.dump
 *.ez
 
 /.elixir_ls
+
+# IntelliJ files
+/.idea
+*.iml

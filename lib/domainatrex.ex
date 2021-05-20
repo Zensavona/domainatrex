@@ -3,28 +3,34 @@ defmodule Domainatrex do
   @moduledoc """
   Documentation for Domainatrex.
   """
-  @public_suffix_list_url 'https://raw.githubusercontent.com/publicsuffix/list/master/public_suffix_list.dat'
+  @public_suffix_list_url Application.get_env(:domainatrex, :public_suffix_list_url, 'https://raw.githubusercontent.com/publicsuffix/list/master/public_suffix_list.dat')
+  @fallback_local_copy Application.get_env(:domainatrex, :fallback_local_copy, "lib/public_suffix_list.dat")
   @public_suffix_list nil
 
   :inets.start
   :ssl.start
-
   case :httpc.request(:get, {@public_suffix_list_url, []}, [], []) do
     {:ok, {_, _, string}} ->
       @public_suffix_list to_string(string)
     _ ->
-      case File.read "lib/public_suffix_list.dat" do
+      case File.read @fallback_local_copy do
         {:ok, string} ->
-          Logger.error "[Domainatrex] Could not read the public suffix list from the internet, trying to read from the backup at lib/public_suffix_list.dat"
+          Logger.error "[Domainatrex] Could not read the public suffix list from the internet, trying to read from the backup at #{@fallback_local_copy}"
           @public_suffix_list string
         _ ->
-          Logger.error "[Domainatrex] Could not read the public suffix list, please make sure that you either have an internet connection or lib/public_suffix_list.dat exists"
+          Logger.error "[Domainatrex] Could not read the public suffix list, please make sure that you either have an internet connection or #{@fallback_local_copy} exists"
           @public_suffix_list nil
       end
   end
 
-  string = @public_suffix_list |> String.split("// ===END ICANN DOMAINS===") |> List.first
   custom_suffixes = Application.get_env(:domainatrex, :custom_suffixes, [])
+  string = if Application.get_env(:domainatrex, :include_private, false) do
+    @public_suffix_list
+  else
+    @public_suffix_list
+    |> String.split("// ===END ICANN DOMAINS===")
+    |> List.first
+  end
   suffixes =
     string
     |> String.split("\n")
