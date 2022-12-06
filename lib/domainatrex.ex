@@ -3,7 +3,6 @@ defmodule Domainatrex do
   @moduledoc """
   Documentation for Domainatrex.
   """
-  @public_suffix_list_url Application.get_env(:domainatrex, :public_suffix_list_url, 'https://raw.githubusercontent.com/publicsuffix/list/master/public_suffix_list.dat')
   @fallback_local_copy Application.get_env(:domainatrex, :fallback_local_copy, "lib/public_suffix_list.dat")
   @fetch_latest Application.get_env(:domainatrex, :fetch_latest, true)
   @public_suffix_list nil
@@ -12,7 +11,8 @@ defmodule Domainatrex do
   :ssl.start
 
   with true <- @fetch_latest,
-       {:ok, {_, _, string}} <- :httpc.request(:get, {@public_suffix_list_url, []}, [], []) do
+       public_suffix_list_url <- Application.get_env(:domainatrex, :public_suffix_list_url, 'https://raw.githubusercontent.com/publicsuffix/list/master/public_suffix_list.dat'),
+       {:ok, {_, _, string}} <- :httpc.request(:get, {public_suffix_list_url, []}, [], []) do
     @public_suffix_list to_string(string)
   else
     _ ->
