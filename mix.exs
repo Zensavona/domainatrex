@@ -2,15 +2,17 @@ defmodule Domainatrex.Mixfile do
   use Mix.Project
 
   def project do
-    [app: :domainatrex,
-     version: "2.2.0",
-     elixir: "~> 1.3",
-     test_coverage: [tool: ExCoveralls],
-     build_embedded: Mix.env == :prod,
-     start_permanent: Mix.env == :prod,
-     description: description(),
-     package: package(),
-     deps: deps()]
+    [
+      app: :domainatrex,
+      version: "2.4.0",
+      elixir: "~> 1.3",
+      test_coverage: [tool: ExCoveralls],
+      build_embedded: Mix.env() == :prod,
+      start_permanent: Mix.env() == :prod,
+      description: description(),
+      package: package(),
+      deps: deps()
+    ]
   end
 
   # Configuration for the OTP application
@@ -39,7 +41,6 @@ defmodule Domainatrex.Mixfile do
     ]
   end
 
-
   defp description do
     """
     Domain / TLD parsing library for Elixir, using the Public Suffix List.
@@ -51,8 +52,10 @@ defmodule Domainatrex.Mixfile do
       licenses: ["MIT"],
       keywords: ["Elixir", "Domain", "TLD", "Public Suffix"],
       maintainers: ["Zen Savona"],
-      links: %{"GitHub" => "https://github.com/zensavona/domainatrex",
-               "Docs" => "https://hexdocs.pm/domainatrex"}
+      links: %{
+        "GitHub" => "https://github.com/zensavona/domainatrex",
+        "Docs" => "https://hexdocs.pm/domainatrex"
+      }
     ]
   end
 end
