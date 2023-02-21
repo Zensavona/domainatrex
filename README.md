@@ -16,7 +16,7 @@ Add the following to your `mix.exs`
 ```
 
 defp deps do
-  [{:domainatrex, "~> 2.4.0"}]
+  [{:domainatrex, "~> 3.0.0"}]
 
 ```
 
@@ -61,6 +61,9 @@ config :domainatrex,
 
 ## Changelog
 
+
+### 3.0.0
+- Breaking change: default to including private domains. `:include_private == false` is still respected (but defaults to false), and a new env var `:icann_only` is added and defaults to false.
 ### 2.4.0
 - Support disabling compile time http request with `:fetch_latest` config (thanks @s3cur3 for the PR!)
 ### 2.3.0 
