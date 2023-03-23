@@ -4,12 +4,12 @@ defmodule Domainatrex do
   @moduledoc """
   Documentation for Domainatrex.
   """
-  @fallback_local_copy Application.get_env(
+  @fallback_local_copy Application.compile_env(
                          :domainatrex,
                          :fallback_local_copy,
                          "lib/public_suffix_list.dat"
                        )
-  @fetch_latest Application.get_env(:domainatrex, :fetch_latest, true)
+  @fetch_latest Application.compile_env(:domainatrex, :fetch_latest, true)
   @public_suffix_list nil
 
   :inets.start()
@@ -17,7 +17,7 @@ defmodule Domainatrex do
 
   with true <- @fetch_latest,
        public_suffix_list_url <-
-         Application.get_env(
+         Application.compile_env(
            :domainatrex,
            :public_suffix_list_url,
            'https://raw.githubusercontent.com/publicsuffix/list/master/public_suffix_list.dat'
@@ -45,11 +45,11 @@ defmodule Domainatrex do
       end
   end
 
-  custom_suffixes = Application.get_env(:domainatrex, :custom_suffixes, [])
+  custom_suffixes = Application.compile_env(:domainatrex, :custom_suffixes, [])
 
   string =
-    if Application.get_env(:domainatrex, :icann_only, false) or
-         Application.get_env(:domainatrex, :include_private, true) == false do
+    if Application.compile_env(:domainatrex, :icann_only, false) or
+         Application.compile_env(:domainatrex, :include_private, true) == false do
       @public_suffix_list
       |> String.split("// ===END ICANN DOMAINS===")
       |> List.first()
