@@ -16,7 +16,7 @@ Add the following to your `mix.exs`
 ```
 
 defp deps do
-  [{:domainatrex, "~> 3.0.0"}]
+  [{:domainatrex, "~> 3.0.1"}]
 
 ```
 
@@ -62,6 +62,8 @@ config :domainatrex,
 ## Changelog
 
 
+### 3.0.1
+- Resolve warnings about SSL and `Mix.Config` being deprecated.
 ### 3.0.0
 - Breaking change: default to including private domains. `:include_private == false` is still respected (but defaults to false), and a new env var `:icann_only` is added and defaults to false.
 ### 2.4.0
