@@ -16,7 +16,7 @@ Add the following to your `mix.exs`
 ```
 
 defp deps do
-  [{:domainatrex, "~> 3.0.2"}]
+  [{:domainatrex, "~> 3.0.3"}]
 
 ```
 
@@ -36,7 +36,7 @@ iex> Domainatrex.parse("blog.someone.id.au")
 
 For maximum performance, `Domainatrex` reads the list of all known top-level domains at compile time.
 Likewise, by default, the package will attempt to fetch the latest list of TLDs from the web before
-falling back to a local (potentially out of date) copy. You can configure this behavior in your 
+falling back to a local (potentially out of date) copy. You can configure this behavior in your
 `config.exs` as follows:
 
 - `:fetch_latest`: A Boolean flag to determine whether `Domainatrex` should try to fetch the latest
@@ -61,14 +61,15 @@ config :domainatrex,
 
 ## Changelog
 
-
+### 3.0.3
+- Fix issue with new, longer domains from public_suffix_list.dat
 ### 3.0.1
 - Resolve warnings about SSL and `Mix.Config` being deprecated.
 ### 3.0.0
 - Breaking change: default to including private domains. `:include_private == false` is still respected (but defaults to false), and a new env var `:icann_only` is added and defaults to false.
 ### 2.4.0
 - Support disabling compile time http request with `:fetch_latest` config (thanks @s3cur3 for the PR!)
-### 2.3.0 
+### 2.3.0
 - Bump deps
 ### 2.2.0
 - Use `Logger` for logging

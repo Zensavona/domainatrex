@@ -122,6 +122,19 @@ defmodule Domainatrex do
           defp match([unquote(Enum.at(suffix, 0)), unquote(Enum.at(suffix, 1)) | _] = args) do
             format_response(Enum.slice(args, 0, 5), Enum.slice(args, 5, 10))
           end
+
+        6 ->
+          defp match([unquote(Enum.at(suffix, 0)), unquote(Enum.at(suffix, 1)), a]) do
+            format_response([unquote(Enum.at(suffix, 0)), unquote(Enum.at(suffix, 1))], [a])
+          end
+
+          defp match([unquote(Enum.at(suffix, 0)), unquote(Enum.at(suffix, 1)), a, b]) do
+            format_response([unquote(Enum.at(suffix, 0)), unquote(Enum.at(suffix, 1))], [a, b])
+          end
+
+          defp match([unquote(Enum.at(suffix, 0)), unquote(Enum.at(suffix, 1)) | _] = args) do
+            format_response(Enum.slice(args, 0, 6), Enum.slice(args, 6, 10))
+          end
       end
     else
       case length(suffix) do
@@ -178,6 +191,30 @@ defmodule Domainatrex do
                 Enum.at(args, 2),
                 Enum.at(args, 3),
                 Enum.at(args, 4)
+              ],
+              tail
+            )
+          end
+
+        6 ->
+          defp match(
+                  [
+                    unquote(Enum.at(suffix, 0)),
+                    unquote(Enum.at(suffix, 1)),
+                    unquote(Enum.at(suffix, 2)),
+                    unquote(Enum.at(suffix, 3)),
+                    unquote(Enum.at(suffix, 4)),
+                    unquote(Enum.at(suffix, 5)) | tail
+                  ] = args
+                ) do
+            format_response(
+              [
+                Enum.at(args, 0),
+                Enum.at(args, 1),
+                Enum.at(args, 2),
+                Enum.at(args, 3),
+                Enum.at(args, 4),
+                Enum.at(args, 5)
               ],
               tail
             )

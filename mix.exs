@@ -35,7 +35,7 @@ defmodule Domainatrex.Mixfile do
   defp deps do
     [
       {:ex_doc, "~> 0.19", only: [:dev, :docs]},
-      {:excoveralls, "~> 0.10.3", only: [:dev, :test]},
+      {:excoveralls, "~> 0.18.0", only: [:dev, :test]},
       {:inch_ex, "~> 1.0", only: [:dev, :docs]},
       {:nimble_parsec, "~> 0.4.0", only: [:dev, :docs]}
     ]
