@@ -1,9 +1,21 @@
 defmodule Domainatrex do
+  @moduledoc """
+  Documentation for Domainatrex
+
+  ## Examples
+      iex> Domainatrex.parse("someone.com")
+      {:ok, %{domain: "someone", subdomain: "", tld: "com"}}
+
+      iex> Domainatrex.parse("blog.someone.id.au")
+      {:ok, %{domain: "someone", subdomain: "blog", tld: "id.au"}}
+
+      iex> Domainatrex.parse("zen.s3.amazonaws.com")
+      {:ok, %{domain: "s3", subdomain: "zen", tld: "amazonaws.com"}}
+
+  """
+
   require Logger
 
-  @moduledoc """
-  Documentation for Domainatrex.
-  """
   @fallback_local_copy Application.compile_env(
                          :domainatrex,
                          :fallback_local_copy,
@@ -20,7 +32,7 @@ defmodule Domainatrex do
          Application.compile_env(
            :domainatrex,
            :public_suffix_list_url,
-           'https://raw.githubusercontent.com/publicsuffix/list/master/public_suffix_list.dat'
+           ~c"https://raw.githubusercontent.com/publicsuffix/list/master/public_suffix_list.dat"
          ),
        {:ok, {_, _, string}} <- :httpc.request(:get, {public_suffix_list_url, []}, [], []) do
     @public_suffix_list to_string(string)
@@ -135,6 +147,19 @@ defmodule Domainatrex do
           defp match([unquote(Enum.at(suffix, 0)), unquote(Enum.at(suffix, 1)) | _] = args) do
             format_response(Enum.slice(args, 0, 6), Enum.slice(args, 6, 10))
           end
+
+        7 ->
+          defp match([unquote(Enum.at(suffix, 0)), unquote(Enum.at(suffix, 1)), a]) do
+            format_response([unquote(Enum.at(suffix, 0)), unquote(Enum.at(suffix, 1))], [a])
+          end
+
+          defp match([unquote(Enum.at(suffix, 0)), unquote(Enum.at(suffix, 1)), a, b]) do
+            format_response([unquote(Enum.at(suffix, 0)), unquote(Enum.at(suffix, 1))], [a, b])
+          end
+
+          defp match([unquote(Enum.at(suffix, 0)), unquote(Enum.at(suffix, 1)) | _] = args) do
+            format_response(Enum.slice(args, 0, 7), Enum.slice(args, 7, 10))
+          end
       end
     else
       case length(suffix) do
@@ -198,15 +223,15 @@ defmodule Domainatrex do
 
         6 ->
           defp match(
-                  [
-                    unquote(Enum.at(suffix, 0)),
-                    unquote(Enum.at(suffix, 1)),
-                    unquote(Enum.at(suffix, 2)),
-                    unquote(Enum.at(suffix, 3)),
-                    unquote(Enum.at(suffix, 4)),
-                    unquote(Enum.at(suffix, 5)) | tail
-                  ] = args
-                ) do
+                 [
+                   unquote(Enum.at(suffix, 0)),
+                   unquote(Enum.at(suffix, 1)),
+                   unquote(Enum.at(suffix, 2)),
+                   unquote(Enum.at(suffix, 3)),
+                   unquote(Enum.at(suffix, 4)),
+                   unquote(Enum.at(suffix, 5)) | tail
+                 ] = args
+               ) do
             format_response(
               [
                 Enum.at(args, 0),
@@ -220,8 +245,34 @@ defmodule Domainatrex do
             )
           end
 
+        7 ->
+          defp match(
+                 [
+                   unquote(Enum.at(suffix, 0)),
+                   unquote(Enum.at(suffix, 1)),
+                   unquote(Enum.at(suffix, 2)),
+                   unquote(Enum.at(suffix, 3)),
+                   unquote(Enum.at(suffix, 4)),
+                   unquote(Enum.at(suffix, 5)),
+                   unquote(Enum.at(suffix, 6)) | tail
+                 ] = args
+               ) do
+            format_response(
+              [
+                Enum.at(args, 0),
+                Enum.at(args, 1),
+                Enum.at(args, 2),
+                Enum.at(args, 3),
+                Enum.at(args, 4),
+                Enum.at(args, 5),
+                Enum.at(args, 6)
+              ],
+              tail
+            )
+          end
+
         _ ->
-          {:error, "There exists a domain in the list which contains more than 5 dots: #{suffix}"}
+          {:error, "There exists a domain in the list which contains more than 7 dots: #{suffix}"}
       end
     end
   end)
@@ -236,18 +287,7 @@ defmodule Domainatrex do
     end
   end
 
-  @doc """
-  ## Examples
-      iex> Domainatrex.parse("someone.com")
-      {:ok, %{domain: "someone", subdomain: "", tld: "com"}}
-
-      iex> Domainatrex.parse("blog.someone.id.au")
-      {:ok, %{domain: "someone", subdomain: "blog", tld: "id.au"}}
-
-      iex> Domainatrex.parse("zen.s3.amazonaws.com")
-      {:ok, %{domain: "s3", subdomain: "zen", tld: "amazonaws.com"}}
-  """
-  def parse(url) do
+  def parse(url) when is_binary(url) do
     case String.length(url) > 1 && String.contains?(url, ".") do
       true ->
         adjusted_url = url |> String.split(".") |> Enum.reverse()
