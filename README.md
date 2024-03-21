@@ -46,6 +46,7 @@ in your `config.exs` as follows:
 - `:fallback_local_copy`: The path to the local suffix file that `Domainatrex` will use if it
   wasn't able to fetch a fresh file from the URL, or if fetching updated files was disabled;
   default is the `"lib/public_suffix_list.dat"` file included in the package.
+- `:custom_suffixes`: In the case that a valid suffix is not found in the public suffix file (example: "com.be") it can be added in addition to all of the suffixes found in the public suffix file. default is : `[]`
 
 Here's a complete example of how you might customize this behavior in your `config.exs`:
 
@@ -55,5 +56,7 @@ config :domainatrex,
   fetch_latest: true,
   # Download the public suffix list from the official source (not necessarily tested with Domainatrex!)
   public_suffix_list_url: 'https://publicsuffix.org/list/public_suffix_list.dat',
-  fallback_local_copy: "priv/my_app_custom_suffix_list.dat"
+  fallback_local_copy: "priv/my_app_custom_suffix_list.dat",
+  # Add custom suffix for com.be
+  custom_suffixes: ["com.be"]
 ```
