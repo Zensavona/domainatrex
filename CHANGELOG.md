@@ -1,11 +1,9 @@
 # Changelog
 
-## 3.0.6
-
-
 ## 3.0.5
 
 - FIX: when download fails use local fallback [@Sgiath](https://github.com/sgiath)
+- FEAT: add update script [@Sgiath](https://github.com/sgiath)
 - Update dependencies [@Sgiath](https://github.com/Sgiath)
 - Add Nix flake setup [@Sgiath](https://github.com/Sgiath)
 - Add LICENSE file [@Sgiath](https://github.com/Sgiath)

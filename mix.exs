@@ -11,7 +11,15 @@ defmodule Domainatrex.Mixfile do
       package: package(),
       deps: deps(),
 
-      # Docs
+      # versioning
+      versioning: [
+        annotate: true,
+        annotation: "new version %s",
+        commit_msg: "new version %s",
+        tag_prefix: "v"
+      ],
+
+      # docs
       name: "Domainatrex",
       description: description(),
       source_url: "https://github.com/Zensavona/domainatrex",
@@ -26,7 +34,8 @@ defmodule Domainatrex.Mixfile do
   defp deps do
     [
       {:ex_doc, "~> 0.38", only: [:dev]},
-      {:ex_check, "~> 0.16", only: [:dev], runtime: false}
+      {:ex_check, "~> 0.16", only: [:dev], runtime: false},
+      {:mix_version, "~> 2.4", only: [:dev, :test], runtime: false}
     ]
   end
 

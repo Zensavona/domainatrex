@@ -36,7 +36,7 @@ defmodule Domainatrex do
          Application.compile_env(
            :domainatrex,
            :public_suffix_list_url,
-           ~c"https://raw.githubusercontent.com/publicsuffix/list/master/public_suffix_list.dat"
+           ~c"https://publicsuffix.org/list/public_suffix_list.dat"
          ),
        {:ok, {_, _, string}} <- :httpc.request(:get, {public_suffix_list_url, []}, [], []) do
     @public_suffix_list to_string(string)

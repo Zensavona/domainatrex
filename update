@@ -1,0 +1,10 @@
+#!/usr/bin/env bash
+
+file=priv/public_suffix_list.dat
+curl -o ${file} https://publicsuffix.org/list/public_suffix_list.dat
+
+git add ${file}
+mix version --patch --commit-msg "chore: update public suffix list"
+git push
+
+mix hex.publish
