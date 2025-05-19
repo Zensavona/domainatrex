@@ -13,7 +13,7 @@ Add the following to your `mix.exs`
 ```elixir
 defp deps do
   [
-    {:domainatrex, "~> 3.0.4"},
+    {:domainatrex, "~> 3.0"},
   ]
 ```
 

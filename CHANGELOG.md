@@ -1,12 +1,22 @@
 # Changelog
 
+## 3.0.6
+
+
+## 3.0.5
+
+- FIX: when download fails use local fallback [@Sgiath](https://github.com/sgiath)
+- Update dependencies [@Sgiath](https://github.com/Sgiath)
+- Add Nix flake setup [@Sgiath](https://github.com/Sgiath)
+- Add LICENSE file [@Sgiath](https://github.com/Sgiath)
+
 ## 3.0.4
 
-- Fix issue with new, even longer domains from public_suffix_list.dat @Sgiath
+- Fix issue with new, even longer domains from public_suffix_list.dat [@Sgiath](https://github.com/Sgiath)
 
 ## 3.0.3
 
-- Fix issue with new, longer domains from public_suffix_list.dat @fabiokr
+- Fix issue with new, longer domains from public_suffix_list.dat [@fabiokr](https://github.com/fabiokr)
 
 ## 3.0.1
 
