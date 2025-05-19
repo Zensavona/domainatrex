@@ -19,7 +19,7 @@ defmodule Domainatrex do
   @fallback_local_copy Application.compile_env(
                          :domainatrex,
                          :fallback_local_copy,
-                         "lib/public_suffix_list.dat"
+                         Application.app_dir(:domainatrex, "priv/public_suffix_list.dat")
                        )
   @fetch_latest Application.compile_env(:domainatrex, :fetch_latest, true)
   @public_suffix_list nil
@@ -27,12 +27,16 @@ defmodule Domainatrex do
   :inets.start()
   :ssl.start()
 
+  if not File.exists?(@fallback_local_copy) do
+    exit("The fallback file does not exists: #{@fallback_local_copy}")
+  end
+
   with true <- @fetch_latest,
        public_suffix_list_url <-
          Application.compile_env(
            :domainatrex,
            :public_suffix_list_url,
-           ~c"https://raw.githubusercontent.com/publicsuffix/list/master/public_suffix_list.dat"
+           ~c"https://publicsuffix.org/list/public_suffix_list.dat"
          ),
        {:ok, {_, _, string}} <- :httpc.request(:get, {public_suffix_list_url, []}, [], []) do
     @public_suffix_list to_string(string)
@@ -41,19 +45,18 @@ defmodule Domainatrex do
       case File.read(@fallback_local_copy) do
         {:ok, string} ->
           if @fetch_latest do
-            Logger.error(
-              "[Domainatrex] Could not read the public suffix list from the internet, trying to read from the backup at #{@fallback_local_copy}"
-            )
+            IO.puts("""
+              Could not read the public suffix list from the internet,
+              trying to read from the backup at #{@fallback_local_copy}
+            """)
           end
 
           @public_suffix_list string
 
         _ ->
-          Logger.error(
-            "[Domainatrex] Could not read the public suffix list, please make sure that you either have an internet connection or #{@fallback_local_copy} exists"
+          exit(
+            "Could not read the public suffix list, please make sure that you either have an internet connection or #{@fallback_local_copy} exists"
           )
-
-          @public_suffix_list nil
       end
   end
 
@@ -61,7 +64,7 @@ defmodule Domainatrex do
 
   string =
     if Application.compile_env(:domainatrex, :icann_only, false) or
-         Application.compile_env(:domainatrex, :include_private, true) == false do
+         not Application.compile_env(:domainatrex, :include_private, true) do
       @public_suffix_list
       |> String.split("// ===END ICANN DOMAINS===")
       |> List.first()

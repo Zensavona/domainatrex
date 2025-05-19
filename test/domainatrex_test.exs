@@ -1,5 +1,6 @@
 defmodule DomainatrexTest do
   use ExUnit.Case
+
   doctest Domainatrex
 
   test "another weird one" do

@@ -4,14 +4,22 @@ defmodule Domainatrex.Mixfile do
   def project do
     [
       app: :domainatrex,
-      version: "3.0.4",
-      elixir: "~> 1.10",
+      version: "3.0.5",
+      elixir: "~> 1.14",
       build_embedded: Mix.env() == :prod,
       start_permanent: Mix.env() == :prod,
       package: package(),
       deps: deps(),
 
-      # Docs
+      # versioning
+      versioning: [
+        annotate: true,
+        annotation: "new version %s",
+        commit_msg: "new version %s",
+        tag_prefix: "v"
+      ],
+
+      # docs
       name: "Domainatrex",
       description: description(),
       source_url: "https://github.com/Zensavona/domainatrex",
@@ -25,7 +33,9 @@ defmodule Domainatrex.Mixfile do
 
   defp deps do
     [
-      {:ex_doc, "~> 0.31", only: [:dev]}
+      {:ex_doc, "~> 0.38", only: [:dev]},
+      {:ex_check, "~> 0.16", only: [:dev], runtime: false},
+      {:mix_version, "~> 2.4", only: [:dev, :test], runtime: false}
     ]
   end
 
@@ -33,7 +43,10 @@ defmodule Domainatrex.Mixfile do
     [
       licenses: ["MIT"],
       keywords: ["Elixir", "Domain", "TLD", "Public Suffix"],
-      maintainers: ["Zen Savona"],
+      maintainers: [
+        "Zen Savona",
+        "Filip Vavera <domainatrex@sgiath.dev>"
+      ],
       links: %{
         "GitHub" => "https://github.com/zensavona/domainatrex",
         "Public Suffix List" => "https://publicsuffix.org/list/"
