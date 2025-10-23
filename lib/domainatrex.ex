@@ -38,8 +38,8 @@ defmodule Domainatrex do
            :public_suffix_list_url,
            ~c"https://publicsuffix.org/list/public_suffix_list.dat"
          ),
-       {:ok, {_, _, string}} <- :httpc.request(:get, {public_suffix_list_url, []}, [], []) do
-    @public_suffix_list to_string(string)
+       {:ok, {_, _, string}} <- :httpc.request(:get, {public_suffix_list_url, []}, [], [{:body_format, :binary}]) do
+    @public_suffix_list string
   else
     _ ->
       case File.read(@fallback_local_copy) do
