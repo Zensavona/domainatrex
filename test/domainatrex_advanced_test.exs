@@ -67,25 +67,21 @@ defmodule DomainatrexAdvancedTest do
 
   test "internationalized domain names" do
     # Test Internationalized Domain Names (IDN) 
-    # The library has mixed support for Unicode domains:
-    # - Latin-based scripts with diacritics (like German umlauts) work
-    # - Non-Latin scripts (like Chinese or Cyrillic) don't work
-    # This test documents the current behavior
 
-    # Example with German umlaut (works)
+    # Example with German umlaut
     assert Domainatrex.parse("käse.de") ==
              {:ok, %{domain: "käse", subdomain: "", tld: "de"}}
 
-    # Example with Chinese characters (simplified) - doesn't work
+    # Example with Chinese characters (simplified)
     assert Domainatrex.parse("例子.中国") ==
-             {:error, "Cannot match: invalid domain"}
+             {:ok, %{domain: "例子", subdomain: "", tld: "中国"}}
 
-    # Example with Cyrillic (Russian) - doesn't work
+    # Example with Cyrillic (Russian)
     assert Domainatrex.parse("пример.рф") ==
-             {:error, "Cannot match: invalid domain"}
+             {:ok, %{domain: "пример", subdomain: "", tld: "рф"}}
 
-    # For full IDN support, domains should be converted to Punycode first
-    # For example: "例子.中国" would become "xn--fsq.xn--fiqs8s"
+    # For full IDN support, domains should be converted from punycode to Unicode first
+    # For example: "xn--fsq.xn--fiqs8s" needs to become "例子.中国"
   end
 
   test "domains with hyphens" do

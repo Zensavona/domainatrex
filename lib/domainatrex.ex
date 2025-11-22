@@ -39,8 +39,10 @@ defmodule Domainatrex do
                                 ~c"https://publicsuffix.org/list/public_suffix_list.dat"
                               ),
                             {:ok, {_, _, string}} <-
-                              :httpc.request(:get, {public_suffix_list_url, []}, [], []) do
-                         to_string(string)
+                              :httpc.request(:get, {public_suffix_list_url, []}, [],
+                                body_format: :binary
+                              ) do
+                         string
                        else
                          _ ->
                            case File.read(@fallback_local_copy) do
@@ -85,6 +87,9 @@ defmodule Domainatrex do
   @trie Domainatrex.TrieBuilder.build(parsed_suffixes)
 
   def parse(url) when is_binary(url) do
+    # domains are case insensitive
+    url = String.downcase(url)
+
     if String.length(url) > 1 and String.contains?(url, ".") do
       parts = url |> String.split(".") |> Enum.reverse()
 
@@ -109,19 +114,25 @@ defmodule Domainatrex do
     current_is_end = Map.get(node, :_end, false)
     new_last_match = if current_is_end, do: {current_path, parts}, else: last_match
 
-    exact_res =
-      case Map.fetch(node, head) do
-        {:ok, child} -> do_find(tail, child, [head | current_path], new_last_match)
-        :error -> nil
-      end
+    case Map.fetch(node, "!" <> head) do
+      {:ok, _} ->
+        {current_path, parts}
 
-    wild_res =
-      case Map.fetch(node, "*") do
-        {:ok, child} -> do_find(tail, child, [head | current_path], new_last_match)
-        :error -> nil
-      end
+      :error ->
+        exact_res =
+          case Map.fetch(node, head) do
+            {:ok, child} -> do_find(tail, child, [head | current_path], new_last_match)
+            :error -> nil
+          end
 
-    pick_better_match(exact_res, wild_res) || new_last_match
+        wild_res =
+          case Map.fetch(node, "*") do
+            {:ok, child} -> do_find(tail, child, [head | current_path], new_last_match)
+            :error -> nil
+          end
+
+        pick_better_match(exact_res, wild_res) || new_last_match
+    end
   end
 
   defp pick_better_match(nil, nil), do: nil
