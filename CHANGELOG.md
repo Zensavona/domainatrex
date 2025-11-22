@@ -1,5 +1,27 @@
 # Changelog
 
+## 4.0.0
+
+### Breaking Changes
+
+- **Unicode Support**: Unicode TLDs are now supported natively. 
+  The parser no longer requires or performs implicit Punycode conversion, 
+  which may affect consumers relying on the old behavior.
+
+### Improvements
+
+- **Performance**: Replaced macro-based compilation with a Trie-based 
+  lookup system. This significantly reduces compilation time and binary size.
+- **Cleanliness**: Eliminated compiler warnings about unreachable clauses 
+  caused by the previous generated code.
+
+### Fixes
+
+- **Rule Precedence**: The longest matching suffix is now guaranteed to be 
+  selected (e.g., correctly distinguishing `s3.amazonaws.com` from `com`).
+- **Exception Rules**: Fixed handling of exception rules (like `!city.kawasaki.jp`) 
+  and wildcard precedence, ensuring strict adherence to the Public Suffix List specification.
+
 ## 3.0.5
 
 - FIX: when download fails use local fallback [@Sgiath](https://github.com/sgiath)
