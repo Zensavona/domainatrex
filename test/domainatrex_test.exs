@@ -28,8 +28,8 @@ defmodule DomainatrexTest do
   end
 
   test "s3" do
-    assert Domainatrex.parse("s3.amazonaws.com") ==
-             {:ok, %{domain: "s3", subdomain: "", tld: "amazonaws.com"}}
+    assert Domainatrex.parse("zen.s3.amazonaws.com") ==
+             {:ok, %{domain: "zen", subdomain: "", tld: "s3.amazonaws.com"}}
   end
 
   test "custom suffix" do
@@ -46,11 +46,11 @@ defmodule DomainatrexTest do
     assert Domainatrex.parse("www.techtunes.bd") ==
              {:ok, %{domain: "techtunes", subdomain: "www", tld: "bd"}}
 
-    assert Domainatrex.parse("send.kawasaki.jp") ==
-             {:ok, %{domain: "send", subdomain: "", tld: "kawasaki.jp"}}
+    assert Domainatrex.parse("mail.send.kawasaki.jp") ==
+             {:ok, %{domain: "mail", subdomain: "", tld: "send.kawasaki.jp"}}
 
     assert Domainatrex.parse("www.send.kawasaki.jp") ==
-             {:ok, %{domain: "send", subdomain: "www", tld: "kawasaki.jp"}}
+             {:ok, %{domain: "www", subdomain: "", tld: "send.kawasaki.jp"}}
 
     assert Domainatrex.parse("www.elb.send.kawasaki.jp") ==
              {:ok, %{domain: "elb", subdomain: "www", tld: "send.kawasaki.jp"}}
