@@ -6,7 +6,7 @@
 
 - **Unicode Support**: Unicode TLDs are now supported natively. 
   The parser no longer requires or performs implicit Punycode conversion, 
-  which may affect consumers relying on the old behavior.
+  which may affect consumers relying on the old behavior [@pyzlnar](https://github.com/pyzlnar)
 
 ### Improvements
 
