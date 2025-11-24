@@ -4,8 +4,8 @@ defmodule Domainatrex.Mixfile do
   def project do
     [
       app: :domainatrex,
-      version: "3.0.5",
-      elixir: "~> 1.14",
+      version: "3.1.0",
+      elixir: "~> 1.15",
       build_embedded: Mix.env() == :prod,
       start_permanent: Mix.env() == :prod,
       package: package(),
@@ -33,9 +33,9 @@ defmodule Domainatrex.Mixfile do
 
   defp deps do
     [
-      {:ex_doc, "~> 0.38", only: [:dev]},
+      {:ex_doc, "~> 0.39", only: [:dev]},
       {:ex_check, "~> 0.16", only: [:dev], runtime: false},
-      {:mix_version, "~> 2.4", only: [:dev, :test], runtime: false}
+      {:mix_version, "~> 2.5", only: [:dev, :test], runtime: false}
     ]
   end
 
