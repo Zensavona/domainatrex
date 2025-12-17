@@ -15,7 +15,7 @@ Add the following to your `mix.exs`
 ```elixir
 defp deps do
   [
-    {:domainatrex, "~> 3.0"},
+    {:domainatrex, "~> 3.2"},
   ]
 ```
 
@@ -31,6 +31,12 @@ iex> Domainatrex.parse("someone.com")
 
 iex> Domainatrex.parse("blog.someone.id.au")
 {:ok, %{domain: "someone", subdomain: "blog", tld: "id.au"}}
+
+iex> Domainatrex.tld?("com")
+true
+
+iex> Domainatrex.tld?("someone.com")
+false
 ```
 
 ## Configuration

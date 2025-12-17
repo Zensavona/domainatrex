@@ -111,4 +111,27 @@ defmodule DomainatrexTest do
     assert Domainatrex.parse("食狮.com.cn") ==
              {:ok, %{domain: "食狮", subdomain: "", tld: "com.cn"}}
   end
+
+  describe "tld?/1" do
+    test "returns true for known public suffixes and false otherwise" do
+      assert Domainatrex.tld?("com")
+      assert Domainatrex.tld?("id.au")
+      assert Domainatrex.tld?("s3.amazonaws.com")
+
+      refute Domainatrex.tld?("someone.com")
+      refute Domainatrex.tld?("")
+      refute Domainatrex.tld?("com.")
+      refute Domainatrex.tld?(".com")
+      refute Domainatrex.tld?("co..uk")
+    end
+
+    test "handles wildcard and exception rules correctly" do
+      # *.bd
+      assert Domainatrex.tld?("com.bd")
+
+      # !city.kawasaki.jp (exception): city.kawasaki.jp is NOT a suffix
+      assert Domainatrex.tld?("other.kawasaki.jp")
+      refute Domainatrex.tld?("city.kawasaki.jp")
+    end
+  end
 end

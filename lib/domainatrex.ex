@@ -1,17 +1,23 @@
 defmodule Domainatrex do
   @moduledoc """
-  Documentation for Domainatrex
+  Domainatrex splits a host name into `{subdomain, domain, tld}` using the
+  [Public Suffix List](https://publicsuffix.org/).
 
-  ## Examples
-      iex> Domainatrex.parse("someone.com")
-      {:ok, %{domain: "someone", subdomain: "", tld: "com"}}
+  Many domain parsing implementations are incorrect if they assume "the TLD is
+  always the last label". For example, `id.au` is a public suffix, so in
+  `blog.someone.id.au` the registrable domain is `someone` and the TLD is `id.au`.
+  Domainatrex uses the Public Suffix List (including wildcard and exception
+  rules) to make this split correctly.
 
-      iex> Domainatrex.parse("blog.someone.id.au")
-      {:ok, %{domain: "someone", subdomain: "blog", tld: "id.au"}}
+  Use this library when you need:
 
-      iex> Domainatrex.parse("zen.s3.amazonaws.com")
-      {:ok, %{domain: "zen", subdomain: "", tld: "s3.amazonaws.com"}}
+  - Deterministic, PSL-correct splitting for analytics, cookie scoping, tenant
+    routing, allow/deny rules, or normalization.
+  - Support for "private" suffixes (like `s3.amazonaws.com`) when enabled via
+    configuration.
 
+  Domainatrex expects a host name (e.g. `example.co.uk`), not a full URL. If you
+  have a URL, extract its host first (for example via Elixir's `URI.parse/1`).
   """
 
   require Logger
@@ -86,6 +92,26 @@ defmodule Domainatrex do
 
   @trie Domainatrex.TrieBuilder.build(parsed_suffixes)
 
+  @doc """
+  Parses a host name into `{subdomain, domain, tld}` using the public suffix list.
+
+  Returns `{:ok, %{domain: domain, subdomain: subdomain, tld: tld}}` when the host
+  contains a registrable domain, otherwise returns `{:error, reason}`.
+
+  Domain labels are treated case-insensitively.
+
+  ## Examples
+
+      iex> Domainatrex.parse("someone.com")
+      {:ok, %{domain: "someone", subdomain: "", tld: "com"}}
+
+      iex> Domainatrex.parse("blog.someone.id.au")
+      {:ok, %{domain: "someone", subdomain: "blog", tld: "id.au"}}
+
+      iex> Domainatrex.parse("zen.s3.amazonaws.com")
+      {:ok, %{domain: "zen", subdomain: "", tld: "s3.amazonaws.com"}}
+
+  """
   def parse(url) when is_binary(url) do
     # domains are case insensitive
     url = String.downcase(url)
@@ -103,6 +129,41 @@ defmodule Domainatrex do
     else
       {:error, "Cannot parse: invalid domain"}
     end
+  end
+
+  @doc """
+  Returns `true` when the given string is a public suffix (TLD) in the loaded public suffix list.
+
+  ## Examples
+
+      iex> Domainatrex.tld?("com")
+      true
+
+      iex> Domainatrex.tld?("id.au")
+      true
+
+      iex> Domainatrex.tld?("someone.com")
+      false
+  """
+  def tld?(tld) when is_binary(tld) do
+    # public suffixes are case insensitive
+    tld = String.downcase(tld)
+
+    if valid_tld_input?(tld) do
+      parts = tld |> String.split(".") |> Enum.reverse()
+
+      case find_longest_match(parts, @trie) do
+        {tld_parts, []} -> length(tld_parts) == length(parts)
+        _ -> false
+      end
+    else
+      false
+    end
+  end
+
+  defp valid_tld_input?(tld) do
+    tld != "" and not String.starts_with?(tld, ".") and not String.ends_with?(tld, ".") and
+      not String.contains?(tld, "..")
   end
 
   defp find_longest_match(parts, trie), do: do_find(parts, trie, [], nil)

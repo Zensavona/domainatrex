@@ -1,25 +1,31 @@
 # Changelog
 
+## 3.2.0
+
+### Features
+
+- **New API**: Add `Domainatrex.tld?/1` to check whether a string is a public suffix (PSL entry) [@Sgiath](https://github.com/sgiath)
+
 ## 3.1.0
 
 ### Breaking Changes
 
-- **Unicode Support**: Unicode TLDs are now supported natively. 
-  The parser no longer requires or performs implicit Punycode conversion, 
+- **Unicode Support**: Unicode TLDs are now supported natively.
+  The parser no longer requires or performs implicit Punycode conversion,
   which may affect consumers relying on the old behavior [@pyzlnar](https://github.com/pyzlnar)
 
 ### Improvements
 
-- **Performance**: Replaced macro-based compilation with a Trie-based 
+- **Performance**: Replaced macro-based compilation with a Trie-based
   lookup system. This significantly reduces compilation time and binary size.
-- **Cleanliness**: Eliminated compiler warnings about unreachable clauses 
+- **Cleanliness**: Eliminated compiler warnings about unreachable clauses
   caused by the previous generated code.
 
 ### Fixes
 
-- **Rule Precedence**: The longest matching suffix is now guaranteed to be 
+- **Rule Precedence**: The longest matching suffix is now guaranteed to be
   selected (e.g., correctly distinguishing `s3.amazonaws.com` from `com`).
-- **Exception Rules**: Fixed handling of exception rules (like `!city.kawasaki.jp`) 
+- **Exception Rules**: Fixed handling of exception rules (like `!city.kawasaki.jp`)
   and wildcard precedence, ensuring strict adherence to the Public Suffix List specification.
 
 ## 3.0.5
