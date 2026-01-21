@@ -33,7 +33,7 @@ defmodule Domainatrex.Mixfile do
 
   defp deps do
     [
-      {:ex_doc, "~> 0.39", only: [:dev]},
+      {:ex_doc, "~> 0.40", only: [:dev]},
       {:ex_check, "~> 0.16", only: [:dev], runtime: false},
       {:mix_version, "~> 2.5", only: [:dev, :test], runtime: false}
     ]

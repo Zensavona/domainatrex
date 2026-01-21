@@ -20,22 +20,10 @@ defmodule Domainatrex do
   have a URL, extract its host first (for example via Elixir's `URI.parse/1`).
   """
 
-  require Logger
-
-  @fallback_local_copy Application.compile_env(
-                         :domainatrex,
-                         :fallback_local_copy,
-                         Application.app_dir(:domainatrex, "priv/public_suffix_list.dat")
-                       )
   @fetch_latest Application.compile_env(:domainatrex, :fetch_latest, true)
-  @public_suffix_list nil
 
   :inets.start()
   :ssl.start()
-
-  if not File.exists?(@fallback_local_copy) do
-    exit("The fallback file does not exists: #{@fallback_local_copy}")
-  end
 
   @public_suffix_list (with true <- @fetch_latest,
                             public_suffix_list_url <-
@@ -51,12 +39,22 @@ defmodule Domainatrex do
                          string
                        else
                          _ ->
-                           case File.read(@fallback_local_copy) do
+                           default_file =
+                             Application.app_dir(:domainatrex, "priv/public_suffix_list.dat")
+
+                           fallback_local_copy =
+                             Application.compile_env(
+                               :domainatrex,
+                               :fallback_local_copy,
+                               default_file
+                             )
+
+                           case File.read(fallback_local_copy) do
                              {:ok, string} ->
                                if @fetch_latest do
                                  IO.puts("""
                                  Could not read the public suffix list from the internet,
-                                 trying to read from the backup at #{@fallback_local_copy}
+                                 trying to read from the backup at #{fallback_local_copy}
                                  """)
                                end
 
@@ -64,9 +62,9 @@ defmodule Domainatrex do
 
                              _ ->
                                exit("""
-                               Could not read the public suffix list, 
-                               please make sure that you either have an internet connection 
-                               or #{@fallback_local_copy} exists
+                               Could not read the public suffix list,
+                               please make sure that you either have an internet connection
+                               or #{fallback_local_copy} exists
                                """)
                            end
                        end)
@@ -116,7 +114,7 @@ defmodule Domainatrex do
     # domains are case insensitive
     url = String.downcase(url)
 
-    if String.length(url) > 1 and String.contains?(url, ".") do
+    if valid_host_input?(url) and String.contains?(url, ".") do
       parts = url |> String.split(".") |> Enum.reverse()
 
       case find_longest_match(parts, @trie) do
@@ -149,7 +147,7 @@ defmodule Domainatrex do
     # public suffixes are case insensitive
     tld = String.downcase(tld)
 
-    if valid_tld_input?(tld) do
+    if valid_host_input?(tld) do
       parts = tld |> String.split(".") |> Enum.reverse()
 
       case find_longest_match(parts, @trie) do
@@ -161,9 +159,9 @@ defmodule Domainatrex do
     end
   end
 
-  defp valid_tld_input?(tld) do
-    tld != "" and not String.starts_with?(tld, ".") and not String.ends_with?(tld, ".") and
-      not String.contains?(tld, "..")
+  defp valid_host_input?(host) do
+    host != "" and not String.starts_with?(host, ".") and not String.ends_with?(host, ".") and
+      not String.contains?(host, "..")
   end
 
   defp find_longest_match(parts, trie), do: do_find(parts, trie, [], nil)

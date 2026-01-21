@@ -62,7 +62,7 @@ defmodule DomainatrexAdvancedTest do
     assert Domainatrex.parse("localhost") == {:error, "Cannot parse: invalid domain"}
 
     # Domain with a trailing dot (technically valid in DNS but not commonly used)
-    assert Domainatrex.parse("example.com.") == {:error, "Cannot match: invalid domain"}
+    assert Domainatrex.parse("example.com.") == {:error, "Cannot parse: invalid domain"}
   end
 
   test "internationalized domain names" do
