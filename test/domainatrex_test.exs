@@ -77,7 +77,7 @@ defmodule DomainatrexTest do
   end
 
   test "valid private suffixes without domain" do
-    ["s3.amazonaws.com", "on.crisp.email"]
+    ["s3.amazonaws.com", "github.io"]
     |> Enum.each(fn domain ->
       assert Domainatrex.parse(domain) == {:error, "Cannot parse: invalid domain"}
     end)

@@ -13,7 +13,6 @@ defmodule Domainatrex.Mixfile do
 
       # versioning
       versioning: [
-        annotate: true,
         annotation: "new version %s",
         commit_msg: "new version %s",
         tag_prefix: "v"
