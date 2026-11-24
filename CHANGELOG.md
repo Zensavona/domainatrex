@@ -1,5 +1,13 @@
 # Changelog
 
+## Unreleased
+
+### Maintenance
+
+- Refresh the bundled fallback `priv/public_suffix_list.dat` from the Mozilla Public Suffix List.
+- Replace the removed `on.crisp.email` PSL entry in tests with `github.io`.
+- Update dev/test dependencies (`ex_check` 0.17.1, `ex_doc` 0.40.5, `mix_version` 2.6.0, `earmark_parser` 1.4.46, `makeup` 1.2.3, `makeup_erlang` 1.1.0) and drop the deprecated `:annotate` option in `mix_version` config.
+
 ## 3.2.0
 
 ### Features
