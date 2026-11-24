@@ -1,3 +1,5 @@
+
+
 # Domainatrex
 
 > Domainatrex is a TLD parsing library for Elixir, using the Public Suffix list
@@ -15,8 +17,9 @@ Add the following to your `mix.exs`
 ```elixir
 defp deps do
   [
-    {:domainatrex, "~> 3.2"},
+    {:domainatrex, "~> 3.2"}
   ]
+end
 ```
 
 ## Usage
